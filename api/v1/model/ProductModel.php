@@ -31,12 +31,13 @@ class ProductModel extends Database{
 
 
     public function listProducts(){
-        return $this->list("SELECT * FROM products");
+        return $this->list("SELECT a.id, a.name, a.category category_id, b.name category_name, a.thumbnail, a.description, a.unit_price, a.measurement measurement_id, c.name measurement_name, c.unit measurement_unit, d.quantity, a.store_id, e.name store_name, e.address store_address, a.images, a.seller_id, a.status, a.created_date FROM products a LEFT JOIN category b ON a.category = b.id LEFT JOIN measurement c ON a.measurement = c.id LEFT JOIN product_stock d ON a.id = d.product_id LEFT JOIN store e ON a.store_id = e.id");
     }
 
 
     public function singleProduct($id){
-        return $this->list("SELECT * FROM products WHERE id='$id'");
+        return $this->list("SELECT a.id, a.name, a.category category_id, b.name category_name, a.thumbnail, a.description, a.unit_price, a.measurement measurement_id, c.name measurement_name, c.unit measurement_unit, d.quantity, a.store_id, e.name store_name, e.address store_address, a.images, a.seller_id, a.status, a.created_date FROM products a LEFT JOIN category b ON a.category = b.id LEFT JOIN measurement c ON a.measurement = c.id LEFT JOIN product_stock d ON a.id = d.product_id LEFT JOIN store e ON a.store_id = e.id WHERE a.id = '$id'");
+        // return $this->list("SELECT * FROM products WHERE id='$id'");
     }
 
 
@@ -48,5 +49,11 @@ class ProductModel extends Database{
     public function checkProduct($product_id){
         return $this->count("SELECT COUNT(1) count FROM products WHERE id='$product_id'");
     }
+
+
+    public function categoryProduct($category_id){
+        return $this->list("SELECT a.id, a.name, a.category category_id, b.name category_name, a.thumbnail, a.description, a.unit_price, a.measurement measurement_id, c.name measurement_name, c.unit measurement_unit, d.quantity, a.store_id, e.name store_name, e.address store_address, a.images, a.seller_id, a.status, a.created_date FROM products a LEFT JOIN category b ON a.category = b.id LEFT JOIN measurement c ON a.measurement = c.id LEFT JOIN product_stock d ON a.id = d.product_id LEFT JOIN store e ON a.store_id = e.id WHERE a.category = '$category_id'");
+    }
+
 
 }

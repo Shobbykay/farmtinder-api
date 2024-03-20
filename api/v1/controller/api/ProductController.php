@@ -204,6 +204,11 @@ class ProductController extends BaseController{
 
         if (is_string($response['data'])){
             $response['data']=[];
+        } else{
+            //change from comma separated to array
+            for ($i=0; $i<count($response['data']); $i++){
+                $response['data'][$i]['images'] = explode(",", $response['data'][$i]['images']);
+            }
         }
 
         $response['message'] = "All products";
@@ -240,7 +245,47 @@ class ProductController extends BaseController{
         $productModel = new ProductModel();
         $response = $productModel->singleProduct($product_id);
 
+        $response['data'][0]['images'] = explode(",", $response['data'][0]['images']);
+
         $response['message'] = "View single product";
+        $responseData = json_encode($response);
+
+        $this->sendOutput(
+            $responseData,
+            array('Content-Type: application/json', 'HTTP/1.1 200 OK')
+        );
+        
+    }
+
+
+
+    //retrieve products by category
+    public function category($category_id){
+
+        $requestMethod = $_SERVER["REQUEST_METHOD"];
+        if (strtoupper($requestMethod) !== 'GET') {
+            $response = [
+                "status" => "error",
+                "message" => "This route does not support this REQUEST METHOD"
+            ];
+
+            $strErrorHeader = 'HTTP/1.1 400 Bad Request';
+
+            $this->sendOutput(
+                json_encode($response), 
+                array('Content-Type: application/json', $strErrorHeader)
+            );
+        }
+
+        $productModel = new ProductModel();
+        $response = $productModel->categoryProduct($category_id);
+
+        //change from comma separated to array
+        for ($i=0; $i<count($response['data']); $i++){
+            $response['data'][$i]['images'] = explode(",", $response['data'][$i]['images']);
+        }
+
+        $response['message'] = "View category products";
         $responseData = json_encode($response);
 
         $this->sendOutput(

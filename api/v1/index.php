@@ -227,10 +227,11 @@ if ($uri[5] == 'user'){
     $actions = [
         "create",
         "list",
-        "view"
+        "view",
+        "category"
     ];
 
-    if ((isset($uri[6]) && !in_array($uri[6], $actions)) || ($uri[6] == 'view')){
+    if ((isset($uri[6]) && !in_array($uri[6], $actions)) || ($uri[6] == 'view') || ($uri[6] == 'category')){
 
         if (!isset($uri[7]) || empty($uri[7])){
             header("HTTP/1.1 404 Not Found");
